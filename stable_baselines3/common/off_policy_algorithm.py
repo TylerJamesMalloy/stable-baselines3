@@ -104,6 +104,7 @@ class OffPolicyAlgorithm(BaseAlgorithm):
         sde_support: bool = True,
         remove_time_limit_termination: bool = False,
         supported_action_spaces: Optional[Tuple[gym.spaces.Space, ...]] = None,
+        arglist=None
     ):
 
         super(OffPolicyAlgorithm, self).__init__(
@@ -136,6 +137,7 @@ class OffPolicyAlgorithm(BaseAlgorithm):
             replay_buffer_kwargs = {}
         self.replay_buffer_kwargs = replay_buffer_kwargs
         self._episode_storage = None
+        self._arglist = arglist
 
         # Remove terminations (dones) that are due to time limit
         # see https://github.com/hill-a/stable-baselines/issues/863
@@ -606,6 +608,11 @@ class OffPolicyAlgorithm(BaseAlgorithm):
                 # Log training infos
                 if log_interval is not None and self._episode_num % log_interval == 0:
                     self._dump_logs()
+                
+                # check if randomizing and if you are call randomize in environment 
+                if(self._arglist.random_training):
+                    print("randomizing after episode")
+                    self.env.unwrapped.randomize() # randomize after each episode 
 
         mean_reward = np.mean(episode_rewards) if num_collected_episodes > 0 else 0.0
 
