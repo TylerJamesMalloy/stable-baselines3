@@ -611,7 +611,6 @@ class OffPolicyAlgorithm(BaseAlgorithm):
                 
                 # check if randomizing and if you are call randomize in environment 
                 if(self._arglist.random_training):
-                    print("randomizing after episode")
                     self.env.unwrapped.randomize() # randomize after each episode 
 
         mean_reward = np.mean(episode_rewards) if num_collected_episodes > 0 else 0.0
